@@ -1,7 +1,13 @@
 package com.example.eldorado.entidades;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
+
+@Getter
+@Setter
 @Entity
 @Table (name = "aeropuertos")
 public class Aeropuerto {
@@ -17,4 +23,8 @@ public class Aeropuerto {
 
     @Column(name = "pais")
     private String pais;
+
+    @OneToMany
+    private List<Vuelo> vuelos;
+
 }

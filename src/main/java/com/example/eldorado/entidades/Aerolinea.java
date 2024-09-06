@@ -1,9 +1,14 @@
 package com.example.eldorado.entidades;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
+import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table (name = "aerolineas")
 public class Aerolinea {
@@ -11,12 +16,16 @@ public class Aerolinea {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column
+    @Column(name = "codigo")
     private int codigo;
 
-    @Column
+    @Column(name = "pais_orgien")
     private String paisOrigen;
+
+    @OneToMany(mappedBy = "aerolinea")
+    private List<Vuelo> vuelos;
+
 }
