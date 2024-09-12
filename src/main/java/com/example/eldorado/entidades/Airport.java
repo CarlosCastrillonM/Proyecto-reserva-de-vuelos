@@ -9,22 +9,22 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table (name = "aeropuertos")
-public class Aeropuerto {
+@Table (name = "airports")
+public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "ciudad")
-    private String ciudad;
+    @Column(name = "city")
+    private String city;
 
-    @Column(name = "pais")
-    private String pais;
+    @Column(name = "country")
+    private String country;
 
     @OneToMany
-    private List<Vuelo> vuelos;
+    private List<Flight> flights;
 
 }

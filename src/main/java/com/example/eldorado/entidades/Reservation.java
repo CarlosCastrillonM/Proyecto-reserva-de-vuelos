@@ -3,22 +3,19 @@ package com.example.eldorado.entidades;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Reference;
 
-import java.time.Duration;
-import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table (name = "reservas")
-public class Reserva {
+@Table (name = "reservations")
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
-    private Cliente cliente;
+    @JoinColumn(name = "id_customer")
+    private Customer customer;
 
 
 }

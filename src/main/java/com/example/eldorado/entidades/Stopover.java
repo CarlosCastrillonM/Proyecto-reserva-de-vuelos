@@ -10,15 +10,15 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table (name = "escalas")
-public class Escala {
+@Table (name = "stopover")
+public class Stopover {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "tiempo_escala")
-    private LocalDate tiempoEscala;
+    @Column(name = "stopover_time")
+    private LocalDate stopoverTime;
 
-    @ManyToMany(mappedBy = "escalas")
-    private List<Vuelo> vuelos;
+    @ManyToMany(mappedBy = "stopovers")
+    private List<Flight> flights;
 }
