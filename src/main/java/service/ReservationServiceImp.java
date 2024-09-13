@@ -1,7 +1,6 @@
 package service;
 
 import com.example.eldorado.entidades.Customer;
-import com.example.eldorado.entidades.Flight;
 import com.example.eldorado.entidades.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
