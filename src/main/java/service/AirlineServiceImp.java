@@ -4,7 +4,6 @@ import com.example.eldorado.entidades.Airline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.AirlineRepository;
-import repository.AirportRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +33,9 @@ public class AirlineServiceImp implements  AirlineService{
         Airline newAirline = new Airline();
         newAirline.setName(airline.getName());
         newAirline.setCode(airline.getCode());
+        newAirline.setCountryOrigin(airline.getCountryOrigin());
+        newAirline.setFlights(airline.getFlights());
+
         return airlineRepository.save(newAirline);
     }
 
@@ -55,7 +57,7 @@ public class AirlineServiceImp implements  AirlineService{
     }
 
     @Override
-    public List<Airline> findAirlineByName(String name) {
+    public List<Airline> findByName(String name) {
         return airlineRepository.findByName(name);
     }
 }

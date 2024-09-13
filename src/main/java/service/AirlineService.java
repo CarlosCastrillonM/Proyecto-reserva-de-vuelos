@@ -11,5 +11,5 @@ public interface AirlineService {
     Airline create(Airline airline);
     Optional<Airline> update(int id, Airline newAirline);
     void delete(int id);
-    List<Airline> findAirlineByName(String name);
+    List<Airline> findByName(String name);
 }
