@@ -32,6 +32,13 @@ public class CustomerServiceImp implements CustomerService {
     public Customer create(Customer customer) {
         Customer newCustomer = new Customer();
         newCustomer.setName(customer.getName());
+        newCustomer.setLastName(customer.getLastName());
+        newCustomer.setAddress(customer.getAddress());
+        newCustomer.setPhone(customer.getPhone());
+        newCustomer.setMail(customer.getMail());
+        newCustomer.setReservations(customer.getReservations());
+        newCustomer.setFlights(customer.getFlights());
+
         return customerRepository.save(newCustomer);
     }
 

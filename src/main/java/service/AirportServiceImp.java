@@ -33,6 +33,10 @@ public class AirportServiceImp implements AirportService {
     public Airport create(Airport airport) {
         Airport newAirport = new Airport();
         newAirport.setName(airport.getName());
+        newAirport.setCity(airport.getCity());
+        newAirport.setCountry(airport.getCountry());
+        newAirport.setFlights(airport.getFlights());
+
         return airportRepository.save(newAirport);
     }
 
