@@ -57,5 +57,10 @@ public class AirlineController {
                 });
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAirline(@PathVariable int id) {
+        airlineService.delete(id);
+        return ResponseEntity.noContent().build()
+    }
 
 }
