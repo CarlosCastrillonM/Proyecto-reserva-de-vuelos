@@ -1,7 +1,17 @@
+package com.example.eldorado.controller;
+
 import com.example.eldorado.entidades.Airline;
 import org.springframework.data.jpa.repository.JpaRepository;
-import service.*
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+
+import com.example.eldorado.service.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,7 +28,7 @@ public class AirlineController {
     }
 
     @GetMapping("/airlines/idAirline")
-    public ResponseEntity<Airline> getAirlineById(@pathVariable Integer id) {
+    public ResponseEntity<Airline> getAirlineById(@PathVariable Integer id) {
         Optional<Airline> airline = airlineService.find(id);
 
         if(airline.isPresent()) {
@@ -30,10 +40,10 @@ public class AirlineController {
     }
 
     @PostMapping()
-    public ResponseEntity<Airline> createAirline(@RequestBody Airline airline) throws URISintaxException {
+    public ResponseEntity<Airline> createAirline(@RequestBody Airline airline) throws URISyntaxException {
         Airline newAirline = airlineService.create(airline);
 
-        URI location = servletUriComponentBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newAirline.getId())
                 .toUri();
@@ -60,7 +70,7 @@ public class AirlineController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAirline(@PathVariable int id) {
         airlineService.delete(id);
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.noContent().build();
     }
 
 }

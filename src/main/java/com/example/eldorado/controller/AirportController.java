@@ -1,7 +1,16 @@
+package com.example.eldorado.controller;
+
 import com.example.eldorado.entidades.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
-import service.*
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.eldorado.service.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v2")
@@ -18,7 +27,7 @@ public class AirportController {
     }
 
     @GetMapping("/airport/idAirport")
-    public ResponseEntity<Airport> getAirportById(@pathVariable Integer id) {
+    public ResponseEntity<Airport> getAirportById(@PathVariable Integer id) {
         Optional<Airport> airport = airportService.find(id);
 
         if(airport.isPresent()) {
@@ -30,10 +39,10 @@ public class AirportController {
     }
 
     @PostMapping()
-    public ResponseEntity<Airport> createAirport(@RequestBody Airport airport) throws URISintaxException {
+    public ResponseEntity<Airport> createAirport(@RequestBody Airport airport) throws URISyntaxException {
         Airport newAirport = airportService.create(airport);
 
-        URI location = servletUriComponentBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newAirport.getId())
                 .toUri();

@@ -1,7 +1,16 @@
+package com.example.eldorado.controller;
+
 import com.example.eldorado.entidades.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import service.*
+import com.example.eldorado.service.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v3")
@@ -18,7 +27,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/idCustomer")
-    public ResponseEntity<Customer> getCustomerById(@pathVariable Integer id) {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
         Optional<Customer> customer = customerService.find(id);
 
         if(customer.isPresent()) {
@@ -30,10 +39,10 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws URISintaxException {
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws URISyntaxException {
         Customer newCustomer = customerService.create(customer);
 
-        URI location = servletUriComponentBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newCustomer.getId())
                 .toUri();

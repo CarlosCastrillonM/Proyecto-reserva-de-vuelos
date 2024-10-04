@@ -1,7 +1,16 @@
+package com.example.eldorado.controller;
+
 import com.example.eldorado.entidades.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
-import service.*
+import com.example.eldorado.service.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v4")
@@ -18,7 +27,7 @@ public class FlightController {
     }
 
     @GetMapping("/flight/idFlight")
-    public ResponseEntity<Flight> getFlightById(@pathVariable Integer id) {
+    public ResponseEntity<Flight> getFlightById(@PathVariable Integer id) {
         Optional<Flight> flight = flightService.find(id);
 
         if(flight.isPresent()) {
@@ -30,10 +39,10 @@ public class FlightController {
     }
 
     @PostMapping()
-    public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) throws URISintaxException {
+    public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) throws URISyntaxException {
         Flight newFlight = flightService.create(flight);
 
-        URI location = servletUriComponentBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newFlight.getId())
                 .toUri();
@@ -47,7 +56,7 @@ public class FlightController {
         return flightUpdated
                 .map(c -> ResponseEntity.ok(c))
                 .orElseGet(() -> {
-                    Customer newFlight = flightService.create(flight);
+                    Flight newFlight = flightService.create(flight);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
                             .buildAndExpand(newFlight.getId())

@@ -1,4 +1,4 @@
-package repository;
+package com.example.eldorado.repository;
 
 import com.example.eldorado.entidades.Airline;
 import org.springframework.data.jpa.repository.JpaRepository;

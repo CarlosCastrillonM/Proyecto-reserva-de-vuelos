@@ -1,4 +1,4 @@
-package service;
+package com.example.eldorado.service;
 
 import com.example.eldorado.entidades.Customer;
 import com.example.eldorado.entidades.Reservation;

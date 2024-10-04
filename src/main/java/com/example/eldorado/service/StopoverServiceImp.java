@@ -1,8 +1,8 @@
-package service;
+package com.example.eldorado.service;
 
 import com.example.eldorado.entidades.Stopover;
 import org.springframework.stereotype.Service;
-import repository.StopoverRepository;
+import com.example.eldorado.repository.StopoverRepository;
 
 import java.time.LocalDate;
 import java.util.List;

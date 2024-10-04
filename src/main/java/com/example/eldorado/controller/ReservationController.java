@@ -1,7 +1,16 @@
+package com.example.eldorado.controller;
+
 import com.example.eldorado.entidades.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
-import service.*
+import com.example.eldorado.service.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v5")
@@ -18,7 +27,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservation/idReservation")
-    public ResponseEntity<Reservation> getReservationById(@pathVariable Integer id) {
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Integer id) {
         Optional<Reservation> reservation = reservationService.find(id);
 
         if(reservation.isPresent()) {
@@ -30,10 +39,10 @@ public class ReservationController {
     }
 
     @PostMapping()
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) throws URISintaxException {
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) throws URISyntaxException {
         Reservation newReservation = reservationService.create(reservation);
 
-        URI location = servletUriComponentBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newReservation.getId())
                 .toUri();
