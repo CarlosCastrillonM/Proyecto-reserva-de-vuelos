@@ -1,6 +1,6 @@
 package com.example.eldorado.service;
 
-import com.example.eldorado.entidades.Flight;
+import com.example.eldorado.entity.Flight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.FlightRepository;

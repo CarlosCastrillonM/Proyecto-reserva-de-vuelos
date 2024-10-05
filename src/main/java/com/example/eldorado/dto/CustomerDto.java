@@ -1,7 +1,7 @@
 package com.example.eldorado.dto;
 
-import com.example.eldorado.entidades.Flight;
-import com.example.eldorado.entidades.Reservation;
+import com.example.eldorado.entity.Flight;
+import com.example.eldorado.entity.Reservation;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package com.example.eldorado.service;
 
-import com.example.eldorado.entidades.Stopover;
+import com.example.eldorado.entity.Stopover;
 
 import java.time.LocalDate;
 import java.util.List;

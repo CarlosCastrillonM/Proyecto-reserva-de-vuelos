@@ -1,6 +1,6 @@
 package com.example.eldorado.dto;
 
-import com.example.eldorado.entidades.Customer;
+import com.example.eldorado.entity.Customer;
 import lombok.Getter;
 import lombok.Setter;
 

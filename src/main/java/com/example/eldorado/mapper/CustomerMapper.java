@@ -1,7 +1,7 @@
 package com.example.eldorado.mapper;
 
 import com.example.eldorado.dto.CustomerDto;
-import com.example.eldorado.entidades.Customer;
+import com.example.eldorado.entity.Customer;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

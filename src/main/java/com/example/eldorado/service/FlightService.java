@@ -1,6 +1,6 @@
 package com.example.eldorado.service;
 
-import com.example.eldorado.entidades.Flight;
+import com.example.eldorado.entity.Flight;
 
 import java.util.List;
 import java.util.Optional;

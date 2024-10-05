@@ -1,6 +1,6 @@
 package com.example.eldorado.repository;
 
-import com.example.eldorado.entidades.Airport;
+import com.example.eldorado.entity.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

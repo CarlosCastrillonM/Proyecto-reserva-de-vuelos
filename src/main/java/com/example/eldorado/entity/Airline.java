@@ -1,4 +1,4 @@
-package com.example.eldorado.entidades;
+package com.example.eldorado.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table (name = "airports")
-public class Airport {
+@Table (name = "airlines")
+public class Airline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,13 +18,13 @@ public class Airport {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "code")
+    private int code;
 
-    @Column(name = "country")
-    private String country;
+    @Column(name = "country_origin")
+    private String countryOrigin;
 
-    @OneToMany
+    @OneToMany(mappedBy = "airline")
     private List<Flight> flights;
 
 }

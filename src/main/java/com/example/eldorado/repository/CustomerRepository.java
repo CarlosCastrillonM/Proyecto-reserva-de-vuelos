@@ -1,6 +1,6 @@
 package com.example.eldorado.repository;
 
-import com.example.eldorado.entidades.Customer;
+import com.example.eldorado.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

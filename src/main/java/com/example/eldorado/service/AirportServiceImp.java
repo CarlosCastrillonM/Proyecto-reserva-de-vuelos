@@ -1,7 +1,7 @@
 package com.example.eldorado.service;
 
 
-import com.example.eldorado.entidades.Airport;
+import com.example.eldorado.entity.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.AirportRepository;

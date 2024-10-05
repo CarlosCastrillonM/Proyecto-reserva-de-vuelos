@@ -1,7 +1,7 @@
 package com.example.eldorado.mapper;
 
 import com.example.eldorado.dto.FlightDto;
-import com.example.eldorado.entidades.Flight;
+import com.example.eldorado.entity.Flight;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

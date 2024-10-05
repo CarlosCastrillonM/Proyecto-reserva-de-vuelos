@@ -1,6 +1,6 @@
 package com.example.eldorado.controller;
 
-import com.example.eldorado.entidades.Customer;
+import com.example.eldorado.entity.Customer;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

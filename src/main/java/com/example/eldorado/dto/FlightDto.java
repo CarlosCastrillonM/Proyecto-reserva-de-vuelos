@@ -1,9 +1,9 @@
 package com.example.eldorado.dto;
 
-import com.example.eldorado.entidades.Airline;
-import com.example.eldorado.entidades.Airport;
-import com.example.eldorado.entidades.Customer;
-import com.example.eldorado.entidades.Stopover;
+import com.example.eldorado.entity.Airline;
+import com.example.eldorado.entity.Airport;
+import com.example.eldorado.entity.Customer;
+import com.example.eldorado.entity.Stopover;
 import lombok.Getter;
 import lombok.Setter;
 

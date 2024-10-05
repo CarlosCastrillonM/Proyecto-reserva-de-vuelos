@@ -1,6 +1,6 @@
 package com.example.eldorado.controller;
 
-import com.example.eldorado.entidades.Airline;
+import com.example.eldorado.entity.Airline;
 import com.example.eldorado.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

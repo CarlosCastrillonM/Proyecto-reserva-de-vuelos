@@ -1,4 +1,4 @@
-package com.example.eldorado.entidades;
+package com.example.eldorado.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

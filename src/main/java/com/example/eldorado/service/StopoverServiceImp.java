@@ -1,6 +1,6 @@
 package com.example.eldorado.service;
 
-import com.example.eldorado.entidades.Stopover;
+import com.example.eldorado.entity.Stopover;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.StopoverRepository;
 
