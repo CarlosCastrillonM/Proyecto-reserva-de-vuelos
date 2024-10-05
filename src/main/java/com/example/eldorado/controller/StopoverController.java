@@ -1,7 +1,6 @@
 package com.example.eldorado.controller;
 
 import com.example.eldorado.entidades.Stopover;
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v6")
+@RequestMapping("/api/v1/stopover")
 public class StopoverController {
     private final StopoverService stopoverService;
 
@@ -26,16 +25,12 @@ public class StopoverController {
         return ResponseEntity.ok(stopoverService.findAll());
     }
 
-    @GetMapping("/stopover/idStopover")
+    @GetMapping("/stopover/{id}")
     public ResponseEntity<Stopover> getReservationById(@PathVariable Integer id) {
         Optional<Stopover> stopover = stopoverService.find(id);
 
-        if(stopover.isPresent()) {
-            return ResponseEntity.ok(stopover.get());
-
-        } else {
-            return ResponseEntity.notFound();
-        }
+        return stopover.map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
@@ -50,11 +45,11 @@ public class StopoverController {
         return ResponseEntity.created(location).body(newStopover);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Stopover> update(@PathVariable int id, @RequestBody Stopover stopover) {
         Optional<Stopover> stopoverUpdated = stopoverService.update(id, stopover);
         return stopoverUpdated
-                .map(c -> ResponseEntity.ok(c))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> {
                     Stopover newStopover = stopoverService.create(stopover);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -66,5 +61,11 @@ public class StopoverController {
                 });
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStopover(@PathVariable int id) {
+        stopoverService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

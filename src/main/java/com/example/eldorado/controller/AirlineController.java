@@ -1,23 +1,23 @@
 package com.example.eldorado.controller;
 
 import com.example.eldorado.entidades.Airline;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.eldorado.service.AirlineService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.eldorado.service.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/airline")
 public class AirlineController {
     private final AirlineService airlineService;
 
+    @Autowired
     public AirlineController(AirlineService airlineService) {
         this.airlineService = airlineService;
     }
@@ -27,16 +27,12 @@ public class AirlineController {
         return ResponseEntity.ok(airlineService.findAll());
     }
 
-    @GetMapping("/airlines/idAirline")
-    public ResponseEntity<Airline> getAirlineById(@PathVariable Integer id) {
+    @GetMapping("/airlines/{idAirline}")
+    public ResponseEntity<Airline> getAirlineById(@PathVariable("idAirline") Integer id) {
         Optional<Airline> airline = airlineService.find(id);
 
-        if(airline.isPresent()) {
-            return ResponseEntity.ok(airline.get());
-
-        } else {
-            return ResponseEntity.notFound();
-        }
+        return airline.map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
@@ -51,11 +47,11 @@ public class AirlineController {
         return ResponseEntity.created(location).body(newAirline);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Airline> update(@PathVariable int id, @RequestBody Airline airline) {
         Optional<Airline> airlineUpdated = airlineService.update(id, airline);
         return airlineUpdated
-                .map(c -> ResponseEntity.ok(c))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> {
                     Airline newAirline = airlineService.create(airline);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -72,5 +68,4 @@ public class AirlineController {
         airlineService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }

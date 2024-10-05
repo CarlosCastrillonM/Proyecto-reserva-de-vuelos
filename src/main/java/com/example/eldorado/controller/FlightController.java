@@ -1,7 +1,6 @@
 package com.example.eldorado.controller;
 
 import com.example.eldorado.entidades.Flight;
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v4")
+@RequestMapping("/api/v1/flight")
 public class FlightController {
     private final FlightService flightService;
 
@@ -26,16 +25,12 @@ public class FlightController {
         return ResponseEntity.ok(flightService.findAll());
     }
 
-    @GetMapping("/flight/idFlight")
+    @GetMapping("/flight/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Integer id) {
         Optional<Flight> flight = flightService.find(id);
 
-        if(flight.isPresent()) {
-            return ResponseEntity.ok(flight.get());
-
-        } else {
-            return ResponseEntity.notFound();
-        }
+        return flight.map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
@@ -50,11 +45,11 @@ public class FlightController {
         return ResponseEntity.created(location).body(newFlight);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Flight> update(@PathVariable int id, @RequestBody Flight flight) {
         Optional<Flight> flightUpdated = flightService.update(id, flight);
         return flightUpdated
-                .map(c -> ResponseEntity.ok(c))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> {
                     Flight newFlight = flightService.create(flight);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -66,5 +61,11 @@ public class FlightController {
                 });
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFlight(@PathVariable int id) {
+        flightService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

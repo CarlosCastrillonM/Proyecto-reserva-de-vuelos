@@ -1,7 +1,6 @@
 package com.example.eldorado.controller;
 
 import com.example.eldorado.entidades.Reservation;
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v5")
+@RequestMapping("/api/v1/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -26,19 +25,15 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.findAll());
     }
 
-    @GetMapping("/reservation/idReservation")
+    @GetMapping("/reservation/{id}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Integer id) {
         Optional<Reservation> reservation = reservationService.find(id);
 
-        if(reservation.isPresent()) {
-            return ResponseEntity.ok(reservation.get());
-
-        } else {
-            return ResponseEntity.notFound();
-        }
+        return reservation.map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) throws URISyntaxException {
         Reservation newReservation = reservationService.create(reservation);
 
@@ -50,11 +45,11 @@ public class ReservationController {
         return ResponseEntity.created(location).body(newReservation);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Reservation> update(@PathVariable int id, @RequestBody Reservation reservation) {
         Optional<Reservation> reservationUpdated = reservationService.update(id, reservation);
         return reservationUpdated
-                .map(c -> ResponseEntity.ok(c))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> {
                     Reservation newReservation = reservationService.create(reservation);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -66,4 +61,10 @@ public class ReservationController {
                 });
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable int id) {
+        reservationService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
