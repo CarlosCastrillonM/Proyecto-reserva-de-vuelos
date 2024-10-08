@@ -1,5 +1,6 @@
 package com.example.eldorado.controller;
 
+import com.example.eldorado.dto.AirlineDto;
 import com.example.eldorado.entity.Airline;
 import com.example.eldorado.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,43 +24,43 @@ public class AirlineController {
     }
 
     @GetMapping("/airlines")
-    public ResponseEntity<List<Airline>> getAllAirlines(){
+    public ResponseEntity<List<AirlineDto>> getAllAirlines(){
         return ResponseEntity.ok(airlineService.findAll());
     }
 
     @GetMapping("/airlines/{idAirline}")
-    public ResponseEntity<Airline> getAirlineById(@PathVariable("idAirline") Integer id) {
-        Optional<Airline> airline = airlineService.find(id);
+    public ResponseEntity<AirlineDto> getAirlineById(@PathVariable("idAirline") Integer id) {
+        Optional<AirlineDto> airlineDto = airlineService.find(id);
 
-        return airline.map(ResponseEntity::ok)
+        return airlineDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<Airline> createAirline(@RequestBody Airline airline) throws URISyntaxException {
-        Airline newAirline = airlineService.create(airline);
+    public ResponseEntity<AirlineDto> createAirline(@RequestBody AirlineDto airlineDto) throws URISyntaxException {
+        AirlineDto newAirlineDto = airlineService.create(airlineDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newAirline.getId())
+                .buildAndExpand(newAirlineDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newAirline);
+        return ResponseEntity.created(location).body(newAirlineDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Airline> update(@PathVariable int id, @RequestBody Airline airline) {
-        Optional<Airline> airlineUpdated = airlineService.update(id, airline);
+    public ResponseEntity<AirlineDto> update(@PathVariable int id, @RequestBody AirlineDto airlineDto) {
+        Optional<AirlineDto> airlineUpdated = airlineService.update(id, airlineDto);
         return airlineUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Airline newAirline = airlineService.create(airline);
+                    AirlineDto newAirlineDto = airlineService.create(airlineDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newAirline.getId())
+                            .buildAndExpand(newAirlineDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newAirline);
+                    return ResponseEntity.created(location).body(newAirlineDto);
                 });
     }
 

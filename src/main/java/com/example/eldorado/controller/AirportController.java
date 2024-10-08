@@ -1,5 +1,6 @@
 package com.example.eldorado.controller;
 
+import com.example.eldorado.dto.AirportDto;
 import com.example.eldorado.entity.Airport;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
@@ -21,43 +22,43 @@ public class AirportController {
     }
 
     @GetMapping("/airport")
-    public ResponseEntity<List<Airport>> getAllAirport(){
+    public ResponseEntity<List<AirportDto>> getAllAirport(){
         return ResponseEntity.ok(airportService.findAll());
     }
 
     @GetMapping("/airport/{id}")
-    public ResponseEntity<Airport> getAirportById(@PathVariable Integer id) {
-        Optional<Airport> airport = airportService.find(id);
+    public ResponseEntity<AirportDto> getAirportById(@PathVariable Integer id) {
+        Optional<AirportDto> airportDto = airportService.find(id);
 
-        return airport.map(ResponseEntity::ok)
+        return airportDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<Airport> createAirport(@RequestBody Airport airport) throws URISyntaxException {
-        Airport newAirport = airportService.create(airport);
+    public ResponseEntity<AirportDto> createAirport(@RequestBody AirportDto airportDto) throws URISyntaxException {
+        AirportDto newAirportDto = airportService.create(airportDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newAirport.getId())
+                .buildAndExpand(newAirportDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newAirport);
+        return ResponseEntity.created(location).body(newAirportDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Airport> update(@PathVariable int id, @RequestBody Airport airport) {
-        Optional<Airport> airportUpdated = airportService.update(id, airport);
+    public ResponseEntity<AirportDto> update(@PathVariable int id, @RequestBody AirportDto airportDto) {
+        Optional<AirportDto> airportUpdated = airportService.update(id, airportDto);
         return airportUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Airport newAirport = airportService.create(airport);
+                    AirportDto newAirportDto = airportService.create(airportDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newAirport.getId())
+                            .buildAndExpand(newAirportDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newAirport);
+                    return ResponseEntity.created(location).body(newAirportDto);
                 });
     }
 

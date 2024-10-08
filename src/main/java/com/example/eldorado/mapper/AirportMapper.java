@@ -8,8 +8,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import javax.swing.*;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AirportMapper {
     AirportMapper INSTANCE = Mappers.getMapper(AirportMapper.class);
 

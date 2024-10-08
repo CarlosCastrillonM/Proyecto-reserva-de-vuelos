@@ -1,11 +1,13 @@
 package com.example.eldorado.service;
 
-
+import com.example.eldorado.dto.AirportDto;
 import com.example.eldorado.entity.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.AirportRepository;
+import com.example.eldorado.mapper.AirportMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,44 +15,55 @@ import java.util.Optional;
 public class AirportServiceImp implements AirportService {
 
     private final AirportRepository airportRepository;
+    private AirportMapper mapper;
 
     @Autowired
-    public AirportServiceImp(AirportRepository airportRepository) {
+    public AirportServiceImp(AirportRepository airportRepository, AirportMapper mapper) {
         this.airportRepository = airportRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Airport> findAll() {
-        return airportRepository.findAll();
+    public List<AirportDto> findAll() {
+        List<Airport> airports = airportRepository.findAll();
+        List<AirportDto> airportDtos = new ArrayList<>();
+
+        for (Airport entity : airports) {
+            airportDtos.add(mapper.toDto(entity));
+        }
+
+        return airportDtos;
     }
 
     @Override
-    public Optional<Airport> find(int id) {
-        return airportRepository.findById(id);
+    public Optional<AirportDto> find(int id) {
+        Optional<Airport> airports = airportRepository.findById(id);
+
+        Optional<AirportDto> airportDtos;
+
+        airportDtos = airports.map(mapper::toDto);
+        return airportDtos;
     }
 
     @Override
-    public Airport create(Airport airport) {
-        Airport newAirport = new Airport();
-        newAirport.setName(airport.getName());
-        newAirport.setCity(airport.getCity());
-        newAirport.setCountry(airport.getCountry());
-        newAirport.setFlights(airport.getFlights());
+    public AirportDto create(AirportDto airportDto) {
+        Airport airportEntity = new Airport();
 
-        return airportRepository.save(newAirport);
+        airportEntity = mapper.toEntity(airportDto);
+        airportEntity = airportRepository.save(airportEntity);
+
+        airportDto = mapper.toDto(airportEntity);
+        return airportDto;
     }
 
     @Override
-    public Optional<Airport> update(int id, Airport newAirport) {
-        return airportRepository.findById(id)
-                .map(AirportInDB -> {
-                    AirportInDB.setName(newAirport.getName());
-                    AirportInDB.setCity(newAirport.getCity());
-                    AirportInDB.setCountry(newAirport.getCountry());
-                    AirportInDB.setFlights(newAirport.getFlights());
+    public Optional<AirportDto> update(int id, AirportDto newAirportDto) {
+        return airportRepository.findById(id).map(AirportInDB -> {
+            AirportInDB = mapper.toEntity(newAirportDto);
+            AirportInDB = airportRepository.save(AirportInDB);
 
-                    return airportRepository.save(AirportInDB);
-                });
+            return mapper.toDto(AirportInDB);
+        });
     }
 
     @Override
@@ -59,7 +72,16 @@ public class AirportServiceImp implements AirportService {
     }
 
     @Override
-    public List<Airport> findAirportByName(String name) {
-        return airportRepository.findByName(name);
+    public List<AirportDto> findByName(String name) {
+        List<Airport> airports = airportRepository.findByName(name);
+        List<AirportDto> airportDtos = new ArrayList<>();
+
+        airports = airportRepository.findByName(name);
+
+        for (Airport entity : airports) {
+            airportDtos.add(mapper.toDto(entity));
+        }
+
+        return airportDtos;
     }
 }

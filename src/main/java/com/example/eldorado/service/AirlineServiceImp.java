@@ -2,7 +2,6 @@ package com.example.eldorado.service;
 
 import com.example.eldorado.dto.AirlineDto;
 import com.example.eldorado.entity.Airline;
-import com.example.eldorado.mapper.AirlineMapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.AirlineRepository;
