@@ -1,10 +1,13 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.CustomerDto;
 import com.example.eldorado.entity.Customer;
+import com.example.eldorado.mapper.CustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.CustomerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,49 +15,56 @@ import java.util.Optional;
 public class CustomerServiceImp implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private CustomerMapper mapper;
 
     @Autowired
-    public CustomerServiceImp(CustomerRepository CustomerRepository) {
+    public CustomerServiceImp(CustomerRepository CustomerRepository, CustomerMapper mapper) {
         this.customerRepository = CustomerRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
+    public List<CustomerDto> findAll() {
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDto> customerDtos = new ArrayList<>();
+
+        for (Customer entity : customers) {
+            customerDtos.add(mapper.toDto(entity));
+        }
+
+        return customerDtos;
     }
 
     @Override
-    public Optional<Customer> find(int id) {
-        return customerRepository.findById(id);
+    public Optional<CustomerDto> find(int id) {
+        Optional<Customer> customers = customerRepository.findById(id);
+
+        Optional<CustomerDto> customerDtos;
+
+        customerDtos = customers.map(mapper::toDto);
+        return customerDtos;
     }
 
     @Override
-    public Customer create(Customer customer) {
-        Customer newCustomer = new Customer();
-        newCustomer.setName(customer.getName());
-        newCustomer.setLastName(customer.getLastName());
-        newCustomer.setAddress(customer.getAddress());
-        newCustomer.setPhone(customer.getPhone());
-        newCustomer.setMail(customer.getMail());
-        newCustomer.setReservations(customer.getReservations());
-        newCustomer.setFlights(customer.getFlights());
+    public CustomerDto create(CustomerDto customerDto) {
+        Customer customerEntity = new Customer();
 
-        return customerRepository.save(newCustomer);
+        customerEntity = mapper.toEntity(customerDto);
+        customerEntity = customerRepository.save(customerEntity);
+
+        customerDto = mapper.toDto(customerEntity);
+        return customerDto;
     }
 
     @Override
-    public Optional<Customer> update(int id, Customer newCustomer) {
-        return customerRepository.findById(id)
-                .map(customerInDB -> {
-                    customerInDB.setName(newCustomer.getName());
-                    customerInDB.setLastName(newCustomer.getLastName());
-                    customerInDB.setAddress(newCustomer.getAddress());
-                    customerInDB.setPhone(newCustomer.getPhone());
-                    customerInDB.setMail(newCustomer.getMail());
-                    customerInDB.setReservations(newCustomer.getReservations());
+    public Optional<CustomerDto> update(int id, CustomerDto newCustomerDto) {
 
-                    return customerRepository.save(customerInDB);
-                });
+        return customerRepository.findById(id).map(CustomerInDB -> {
+            CustomerInDB = mapper.toEntity(newCustomerDto);
+            CustomerInDB = customerRepository.save(CustomerInDB);
+
+            return mapper.toDto(CustomerInDB);
+        });
     }
 
     @Override
@@ -63,8 +73,16 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public List<Customer> findCustomerByName(String name) {
-        return customerRepository.findByName(name);
-    }
+    public List<CustomerDto> findByName(String name) {
+        List<Customer> customers = customerRepository.findByName(name);
+        List<CustomerDto> customerDtos = new ArrayList<>();
 
+        customers = customerRepository.findByName(name);
+
+        for (Customer entity : customers) {
+            customerDtos.add(mapper.toDto(entity));
+        }
+
+        return customerDtos;
+    }
 }
