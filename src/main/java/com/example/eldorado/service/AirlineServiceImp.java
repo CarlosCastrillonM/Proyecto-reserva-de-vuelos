@@ -1,10 +1,14 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.AirlineDto;
 import com.example.eldorado.entity.Airline;
+import com.example.eldorado.mapper.AirlineMapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.AirlineRepository;
+import com.example.eldorado.mapper.AirlineMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,42 +16,55 @@ import java.util.Optional;
 public class AirlineServiceImp implements  AirlineService{
 
     private final AirlineRepository airlineRepository;
+    private AirlineMapper mapper;
 
     @Autowired
-    public AirlineServiceImp(AirlineRepository airlineRepository) {
+    public AirlineServiceImp(AirlineRepository airlineRepository, AirlineMapper mapper) {
         this.airlineRepository = airlineRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Airline> findAll() {
-        return airlineRepository.findAll();
+    public List<AirlineDto> findAll() {
+        List<Airline> airlines = airlineRepository.findAll();
+        List<AirlineDto> airlineDtos = new ArrayList<>();
+
+        for (Airline entity : airlines) {
+            airlineDtos.add(mapper.toDto(entity));
+        }
+
+        return airlineDtos;
     }
 
     @Override
-    public Optional<Airline> find(int id) {
-        return airlineRepository.findById(id);
+    public Optional<AirlineDto> find(int id) {
+        Optional<Airline> airlines = airlineRepository.findById(id);
+
+        Optional<AirlineDto> airlineDtos;
+
+        airlineDtos = airlines.map(mapper::toDto);
+        return airlineDtos;
     }
 
     @Override
-    public Airline create(Airline airline) {
-        Airline newAirline = new Airline();
-        newAirline.setName(airline.getName());
-        newAirline.setCode(airline.getCode());
-        newAirline.setCountryOrigin(airline.getCountryOrigin());
-        newAirline.setFlights(airline.getFlights());
+    public AirlineDto create(AirlineDto airlineDto) {
+        Airline airlineEntity = new Airline();
 
-        return airlineRepository.save(newAirline);
+        airlineEntity = mapper.toEntity(airlineDto);
+        airlineEntity = airlineRepository.save(airlineEntity);
+
+        airlineDto = mapper.toDto(airlineEntity);
+        return airlineDto;
     }
 
     @Override
-    public Optional<Airline> update(int id, Airline newAirline) {
+    public Optional<AirlineDto> update(int id, AirlineDto newAirlineDto) {
+
         return airlineRepository.findById(id).map(AirlineInDB -> {
-            AirlineInDB.setName(newAirline.getName());
-            AirlineInDB.setCode(newAirline.getCode());
-            AirlineInDB.setCountryOrigin(newAirline.getCountryOrigin());
-            AirlineInDB.setFlights(newAirline.getFlights());
+            AirlineInDB = mapper.toEntity(newAirlineDto);
+            AirlineInDB = airlineRepository.save(AirlineInDB);
 
-            return airlineRepository.save(AirlineInDB);
+            return mapper.toDto(AirlineInDB);
         });
     }
 
@@ -57,7 +74,17 @@ public class AirlineServiceImp implements  AirlineService{
     }
 
     @Override
-    public List<Airline> findByName(String name) {
-        return airlineRepository.findByName(name);
+    public List<AirlineDto> findByName(String name) {
+        List<Airline> airlines = airlineRepository.findByName(name);
+        List<AirlineDto> airlineDtos = new ArrayList<>();
+
+        airlines = airlineRepository.findByName(name);
+
+        for (Airline entity : airlines) {
+            airlineDtos.add(mapper.toDto(entity));
+        }
+
+        return airlineDtos;
     }
+
 }

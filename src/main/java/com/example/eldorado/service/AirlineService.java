@@ -1,15 +1,16 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.AirlineDto;
 import com.example.eldorado.entity.Airline;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AirlineService {
-    List<Airline> findAll();
-    Optional<Airline> find(int id);
-    Airline create(Airline airline);
-    Optional<Airline> update(int id, Airline newAirline);
+    List<AirlineDto> findAll();
+    Optional<AirlineDto> find(int id);
+    AirlineDto create(AirlineDto airlineDto);
+    Optional<AirlineDto> update(int id, AirlineDto newAirlineDto);
     void delete(int id);
-    List<Airline> findByName(String name);
+    List<AirlineDto> findByName(String name);
 }
