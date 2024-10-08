@@ -1,5 +1,6 @@
 package com.example.eldorado.controller;
 
+import com.example.eldorado.dto.CustomerDto;
 import com.example.eldorado.entity.Customer;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
@@ -21,43 +22,43 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ResponseEntity<List<Customer>> getAllCustomer(){
+    public ResponseEntity<List<CustomerDto>> getAllCustomer(){
         return ResponseEntity.ok(customerService.findAll());
     }
 
     @GetMapping("/customer/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
-        Optional<Customer> customer = customerService.find(id);
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer id) {
+        Optional<CustomerDto> customerDto = customerService.find(id);
 
-        return customer.map(ResponseEntity::ok)
+        return customerDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws URISyntaxException {
-        Customer newCustomer = customerService.create(customer);
+    public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto) throws URISyntaxException {
+        CustomerDto newCustomerDto = customerService.create(customerDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newCustomer.getId())
+                .buildAndExpand(newCustomerDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newCustomer);
+        return ResponseEntity.created(location).body(newCustomerDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> update(@PathVariable int id, @RequestBody Customer customer) {
-        Optional<Customer> customerUpdated = customerService.update(id, customer);
+    public ResponseEntity<CustomerDto> update(@PathVariable int id, @RequestBody CustomerDto customerDto) {
+        Optional<CustomerDto> customerUpdated = customerService.update(id, customerDto);
         return customerUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Customer newCustomer = customerService.create(customer);
+                    CustomerDto newCustomerDto = customerService.create(customerDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newCustomer.getId())
+                            .buildAndExpand(newCustomerDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newCustomer);
+                    return ResponseEntity.created(location).body(newCustomerDto);
                 });
     }
 
