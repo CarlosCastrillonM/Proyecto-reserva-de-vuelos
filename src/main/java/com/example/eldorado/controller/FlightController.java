@@ -1,5 +1,6 @@
 package com.example.eldorado.controller;
 
+import com.example.eldorado.dto.FlightDto;
 import com.example.eldorado.entity.Flight;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
@@ -21,43 +22,43 @@ public class FlightController {
     }
 
     @GetMapping("/flight")
-    public ResponseEntity<List<Flight>> getAllFlight(){
+    public ResponseEntity<List<FlightDto>> getAllFlight(){
         return ResponseEntity.ok(flightService.findAll());
     }
 
     @GetMapping("/flight/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable Integer id) {
-        Optional<Flight> flight = flightService.find(id);
+    public ResponseEntity<FlightDto> getFlightById(@PathVariable Integer id) {
+        Optional<FlightDto> flightDto = flightService.find(id);
 
-        return flight.map(ResponseEntity::ok)
+        return flightDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) throws URISyntaxException {
-        Flight newFlight = flightService.create(flight);
+    public ResponseEntity<FlightDto> createFlight(@RequestBody FlightDto flightDto) throws URISyntaxException {
+        FlightDto newFlightDto = flightService.create(flightDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newFlight.getId())
+                .buildAndExpand(newFlightDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newFlight);
+        return ResponseEntity.created(location).body(newFlightDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Flight> update(@PathVariable int id, @RequestBody Flight flight) {
-        Optional<Flight> flightUpdated = flightService.update(id, flight);
+    public ResponseEntity<FlightDto> update(@PathVariable int id, @RequestBody FlightDto flightDto) {
+        Optional<FlightDto> flightUpdated = flightService.update(id, flightDto);
         return flightUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Flight newFlight = flightService.create(flight);
+                    FlightDto newFlightDto = flightService.create(flightDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newFlight.getId())
+                            .buildAndExpand(newFlightDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newFlight);
+                    return ResponseEntity.created(location).body(newFlightDto);
                 });
     }
 

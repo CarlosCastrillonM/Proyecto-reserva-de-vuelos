@@ -1,6 +1,6 @@
 package com.example.eldorado.controller;
 
-import com.example.eldorado.entity.Stopover;
+import com.example.eldorado.dto.StopoverDto;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,43 +21,43 @@ public class StopoverController {
     }
 
     @GetMapping("/stopover")
-    public ResponseEntity<List<Stopover>> getAllStopover(){
+    public ResponseEntity<List<StopoverDto>> getAllStopover(){
         return ResponseEntity.ok(stopoverService.findAll());
     }
 
     @GetMapping("/stopover/{id}")
-    public ResponseEntity<Stopover> getReservationById(@PathVariable Integer id) {
-        Optional<Stopover> stopover = stopoverService.find(id);
+    public ResponseEntity<StopoverDto> getReservationById(@PathVariable Integer id) {
+        Optional<StopoverDto> stopoverDto = stopoverService.find(id);
 
-        return stopover.map(ResponseEntity::ok)
+        return stopoverDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<Stopover> createReservation(@RequestBody Stopover stopover) throws URISyntaxException {
-        Stopover newStopover = stopoverService.create(stopover);
+    public ResponseEntity<StopoverDto> createReservation(@RequestBody StopoverDto stopoverDto) throws URISyntaxException {
+        StopoverDto newStopoverDto = stopoverService.create(stopoverDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newStopover.getId())
+                .buildAndExpand(newStopoverDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newStopover);
+        return ResponseEntity.created(location).body(newStopoverDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Stopover> update(@PathVariable int id, @RequestBody Stopover stopover) {
-        Optional<Stopover> stopoverUpdated = stopoverService.update(id, stopover);
+    public ResponseEntity<StopoverDto> update(@PathVariable int id, @RequestBody StopoverDto stopoverDto) {
+        Optional<StopoverDto> stopoverUpdated = stopoverService.update(id, stopoverDto);
         return stopoverUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Stopover newStopover = stopoverService.create(stopover);
+                    StopoverDto newStopoverDto = stopoverService.create(stopoverDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newStopover.getId())
+                            .buildAndExpand(newStopoverDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newStopover);
+                    return ResponseEntity.created(location).body(newStopoverDto);
                 });
     }
 

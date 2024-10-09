@@ -1,6 +1,6 @@
 package com.example.eldorado.controller;
 
-import com.example.eldorado.entity.Reservation;
+import com.example.eldorado.dto.ReservationDto;
 import com.example.eldorado.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,43 +21,43 @@ public class ReservationController {
     }
 
     @GetMapping("/reservation")
-    public ResponseEntity<List<Reservation>> getAllReservation(){
+    public ResponseEntity<List<ReservationDto>> getAllReservation(){
         return ResponseEntity.ok(reservationService.findAll());
     }
 
     @GetMapping("/reservation/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Integer id) {
-        Optional<Reservation> reservation = reservationService.find(id);
+    public ResponseEntity<ReservationDto> getReservationById(@PathVariable Integer id) {
+        Optional<ReservationDto> reservationDto = reservationService.find(id);
 
-        return reservation.map(ResponseEntity::ok)
+        return reservationDto.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) throws URISyntaxException {
-        Reservation newReservation = reservationService.create(reservation);
+    public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) throws URISyntaxException {
+        ReservationDto newReservationDto = reservationService.create(reservationDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newReservation.getId())
+                .buildAndExpand(newReservationDto.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newReservation);
+        return ResponseEntity.created(location).body(newReservationDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> update(@PathVariable int id, @RequestBody Reservation reservation) {
-        Optional<Reservation> reservationUpdated = reservationService.update(id, reservation);
+    public ResponseEntity<ReservationDto> update(@PathVariable int id, @RequestBody ReservationDto reservationDto) {
+        Optional<ReservationDto> reservationUpdated = reservationService.update(id, reservationDto);
         return reservationUpdated
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> {
-                    Reservation newReservation = reservationService.create(reservation);
+                    ReservationDto newReservationDto = reservationService.create(reservationDto);
                     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                             .path("/{id}")
-                            .buildAndExpand(newReservation.getId())
+                            .buildAndExpand(newReservationDto.getId())
                             .toUri();
 
-                    return ResponseEntity.created(location).body(newReservation);
+                    return ResponseEntity.created(location).body(newReservationDto);
                 });
     }
 
