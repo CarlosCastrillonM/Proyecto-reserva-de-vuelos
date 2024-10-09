@@ -1,13 +1,9 @@
 package com.example.eldorado.dto;
 
 import com.example.eldorado.entity.Flight;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
-@Getter
 public class AirportDto {
     private Integer id;
     private String name;
@@ -20,6 +16,46 @@ public class AirportDto {
         this.name = name;
         this.city = city;
         this.country = country;
+        this.flights = flights;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
         this.flights = flights;
     }
 
