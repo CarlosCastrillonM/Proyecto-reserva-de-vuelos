@@ -1,11 +1,19 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.CustomerDto;
+import com.example.eldorado.dto.FlightDto;
+import com.example.eldorado.dto.ReservationDto;
 import com.example.eldorado.entity.Customer;
+import com.example.eldorado.entity.Flight;
 import com.example.eldorado.entity.Reservation;
+import com.example.eldorado.mapper.CustomerMapper;
+import com.example.eldorado.mapper.ReservationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.ReservationRepository;
+import com.example.eldorado.repository.CustomerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,37 +21,58 @@ import java.util.Optional;
 public class ReservationServiceImp implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final CustomerRepository customerRepository;
+    private ReservationMapper reservationMapper;
+    private CustomerMapper customerMapper;
 
     @Autowired
-    public ReservationServiceImp(ReservationRepository reservationRepository) {
+    public ReservationServiceImp(ReservationRepository reservationRepository, CustomerRepository customerRepository, ReservationMapper reservationMapper, CustomerMapper customerMapper) {
         this.reservationRepository = reservationRepository;
+        this.customerRepository = customerRepository;
+        this.reservationMapper = reservationMapper;
+        this.customerMapper = customerMapper;
     }
 
     @Override
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+    public List<ReservationDto> findAll() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<ReservationDto> reservationDtos = new ArrayList<>();
+
+        for (Reservation entity : reservations) {
+            reservationDtos.add(reservationMapper.toDto(entity));
+        }
+
+        return reservationDtos;
     }
 
     @Override
-    public Optional<Reservation> find(int id) {
-        return reservationRepository.findById(id);
+    public Optional<ReservationDto> find(int id) {
+        Optional<Reservation> reservations = reservationRepository.findById(id);
+
+        Optional<ReservationDto> reservationDtos;
+
+        reservationDtos = reservations.map(reservationMapper::toDto);
+        return reservationDtos;
     }
 
     @Override
-    public Reservation create(Reservation reservation) {
-        Reservation newReservation = new Reservation();
+    public ReservationDto create(ReservationDto reservationDto) {
+        Reservation reservationEntity = new Reservation();
 
-        newReservation.setCustomer(reservation.getCustomer());
+        reservationEntity = reservationMapper.toEntity(reservationDto);
+        reservationEntity = reservationRepository.save(reservationEntity);
 
-        return reservationRepository.save(newReservation);
+        reservationDto = reservationMapper.toDto(reservationEntity);
+        return reservationDto;
     }
 
     @Override
-    public Optional<Reservation> update(int id, Reservation newReservation) {
+    public Optional<ReservationDto> update(int id, ReservationDto newReservationDto) {
         return reservationRepository.findById(id).map(ReservationInDB -> {
-            ReservationInDB.setCustomer(newReservation.getCustomer());
+            ReservationInDB = reservationMapper.toEntity(newReservationDto);
+            ReservationInDB = reservationRepository.save(ReservationInDB);
 
-            return reservationRepository.save(ReservationInDB);
+            return reservationMapper.toDto(ReservationInDB);
         });
     }
 
@@ -53,7 +82,20 @@ public class ReservationServiceImp implements ReservationService {
     }
 
     @Override
-    public List<Reservation> findByCustomer(Customer customer) {
-        return reservationRepository.findByCustomer(customer);
+    public List<CustomerDto> findByCustomer(CustomerDto customerDto) {
+        Customer customer = customerMapper.toEntity(customerDto);
+        String customerName = customerDto.
+
+        List<Customer> customers = customerRepository.findByName(customer);
+
+        List<FlightDto> flightDtos = new ArrayList<>();
+
+        customers = customerRepository.findByOrigin(origin);
+
+        for (Customer entity : customers) {
+            flightDtos.add(reservationMapper.toDto(entity));
+        }
+
+        return flightDtos;
     }
 }
