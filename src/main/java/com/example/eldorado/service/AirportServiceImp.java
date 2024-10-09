@@ -76,8 +76,6 @@ public class AirportServiceImp implements AirportService {
         List<Airport> airports = airportRepository.findByName(name);
         List<AirportDto> airportDtos = new ArrayList<>();
 
-        airports = airportRepository.findByName(name);
-
         for (Airport entity : airports) {
             airportDtos.add(mapper.toDto(entity));
         }

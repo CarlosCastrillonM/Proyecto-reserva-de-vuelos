@@ -77,8 +77,6 @@ public class CustomerServiceImp implements CustomerService {
         List<Customer> customers = customerRepository.findByName(name);
         List<CustomerDto> customerDtos = new ArrayList<>();
 
-        customers = customerRepository.findByName(name);
-
         for (Customer entity : customers) {
             customerDtos.add(mapper.toDto(entity));
         }

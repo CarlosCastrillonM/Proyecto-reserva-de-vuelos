@@ -77,8 +77,6 @@ public class AirlineServiceImp implements  AirlineService{
         List<Airline> airlines = airlineRepository.findByName(name);
         List<AirlineDto> airlineDtos = new ArrayList<>();
 
-        airlines = airlineRepository.findByName(name);
-
         for (Airline entity : airlines) {
             airlineDtos.add(mapper.toDto(entity));
         }

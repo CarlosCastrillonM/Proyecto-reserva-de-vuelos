@@ -76,8 +76,6 @@ public class FlightServiceImp implements FlightService {
         List<Flight> flights = flightRepository.findByOrigin(origin);
         List<FlightDto> flightDtos = new ArrayList<>();
 
-        flights = flightRepository.findByOrigin(origin);
-
         for (Flight entity : flights) {
             flightDtos.add(mapper.toDto(entity));
         }
