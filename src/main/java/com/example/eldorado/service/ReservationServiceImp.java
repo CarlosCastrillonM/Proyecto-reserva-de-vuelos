@@ -82,20 +82,12 @@ public class ReservationServiceImp implements ReservationService {
     }
 
     @Override
-    public List<CustomerDto> findByCustomer(CustomerDto customerDto) {
-        Customer customer = customerMapper.toEntity(customerDto);
-        String customerName = customerDto.
+    public Optional<CustomerDto> findByIdCustomer(CustomerDto customerDto) {
+        Integer id = customerDto.getId();
 
-        List<Customer> customers = customerRepository.findByName(customer);
+        Optional<Customer> customers = customerRepository.findById(id);
 
-        List<FlightDto> flightDtos = new ArrayList<>();
-
-        customers = customerRepository.findByOrigin(origin);
-
-        for (Customer entity : customers) {
-            flightDtos.add(reservationMapper.toDto(entity));
-        }
-
-        return flightDtos;
+        return customers.map(customerMapper::toDto);    //reservationMapper::toDto = (customer) -> reservationMapper.toDto(customer)
     }
+
 }

@@ -12,5 +12,5 @@ public interface ReservationService {
     ReservationDto create(ReservationDto reservationDto);
     Optional<ReservationDto> update(int id, ReservationDto newReservationDto);
     void delete(int id);
-    List<CustomerDto> findByCustomer(CustomerDto customerDto);
+    Optional<CustomerDto> findByIdCustomer(CustomerDto customerDto);
 }
