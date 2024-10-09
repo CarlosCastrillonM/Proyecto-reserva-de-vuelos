@@ -1,10 +1,13 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.FlightDto;
 import com.example.eldorado.entity.Flight;
+import com.example.eldorado.mapper.FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eldorado.repository.FlightRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,53 +15,54 @@ import java.util.Optional;
 public class FlightServiceImp implements FlightService {
 
     private final FlightRepository flightRepository;
+    private FlightMapper mapper;
 
     @Autowired
-    public FlightServiceImp(FlightRepository flightRepository) {
+    public FlightServiceImp(FlightRepository flightRepository, FlightMapper mapper) {
         this.flightRepository = flightRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Flight> findAll() {
-        return flightRepository.findAll();
+    public List<FlightDto> findAll() {
+        List<Flight> flights = flightRepository.findAll();
+        List<FlightDto> flightDtos = new ArrayList<>();
+
+        for (Flight entity : flights) {
+            flightDtos.add(mapper.toDto(entity));
+        }
+
+        return flightDtos;
     }
 
     @Override
-    public Optional<Flight> find(int id) {
-        return flightRepository.findById(id);
+    public Optional<FlightDto> find(int id) {
+        Optional<Flight> flights = flightRepository.findById(id);
+
+        Optional<FlightDto> flightDtos;
+
+        flightDtos = flights.map(mapper::toDto);
+        return flightDtos;
     }
 
     @Override
-    public Flight create(Flight flight) {
-        Flight newFlight = new Flight();
+    public FlightDto create(FlightDto flightDto) {
+        Flight flightEntity = new Flight();
 
-        newFlight.setOrigin(flight.getOrigin());
-        newFlight.setDestination(flight.getDestination());
-        newFlight.setDepartureDate(flight.getDepartureDate());
-        newFlight.setArrivalDate(flight.getArrivalDate());
-        newFlight.setCapacity(flight.getCapacity());
-        newFlight.setDuration(flight.getDuration());
-        newFlight.setAirline(flight.getAirline());
-        newFlight.setCustomers(flight.getCustomers());
-        newFlight.setStopovers(flight.getStopovers());
+        flightEntity = mapper.toEntity(flightDto);
+        flightEntity = flightRepository.save(flightEntity);
 
-        return flightRepository.save(newFlight);
+        flightDto = mapper.toDto(flightEntity);
+        return flightDto;
     }
 
     @Override
-    public Optional<Flight> update(int id, Flight newFlight) {
+    public Optional<FlightDto> update(int id, FlightDto newFlightDto) {
         return flightRepository.findById(id).map(FlightInDB -> {
-            FlightInDB.setOrigin(newFlight.getOrigin());
-            FlightInDB.setDestination(newFlight.getDestination());
-            FlightInDB.setDepartureDate(newFlight.getDepartureDate());
-            FlightInDB.setArrivalDate(newFlight.getArrivalDate());
-            FlightInDB.setCapacity(newFlight.getCapacity());
-            FlightInDB.setDuration(newFlight.getDuration());
-            FlightInDB.setAirline(newFlight.getAirline());
-            FlightInDB.setCustomers(newFlight.getCustomers());
-            FlightInDB.setStopovers(newFlight.getStopovers());
+            FlightInDB = mapper.toEntity(newFlightDto);
+            FlightInDB = flightRepository.save(FlightInDB);
 
-            return flightRepository.save(FlightInDB);
+            return mapper.toDto(FlightInDB);
         });
     }
 
@@ -68,7 +72,16 @@ public class FlightServiceImp implements FlightService {
     }
 
     @Override
-    public List<Flight> findByOrigin(String origin) {
-        return flightRepository.findByOrigin(origin);
+    public List<FlightDto> findByOrigin(String origin) {
+        List<Flight> flights = flightRepository.findByOrigin(origin);
+        List<FlightDto> flightDtos = new ArrayList<>();
+
+        flights = flightRepository.findByOrigin(origin);
+
+        for (Flight entity : flights) {
+            flightDtos.add(mapper.toDto(entity));
+        }
+
+        return flightDtos;
     }
 }
