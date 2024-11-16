@@ -41,14 +41,8 @@ public class UserDetailsImp implements UserDetails {
                 authorities);
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
+    public Integer getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -56,7 +50,17 @@ public class UserDetailsImp implements UserDetails {
     }
 
     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 }
