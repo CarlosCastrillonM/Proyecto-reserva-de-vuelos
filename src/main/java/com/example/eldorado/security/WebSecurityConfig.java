@@ -2,7 +2,6 @@ package com.example.eldorado.security;
 
 import com.example.eldorado.security.jwt.AuthTokenFilter;
 import com.example.eldorado.security.jwt.exception.AuthEntryPointJwt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    @Autowired private UserDetailsService userDetailsService;
-    @Autowired private AuthEntryPointJwt unathorizedHandler;
+    private final UserDetailsService userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
+
+    public WebSecurityConfig(UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
+
     @Bean
     public AuthTokenFilter authTokenFilter(){
         return new AuthTokenFilter();
@@ -44,7 +49,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unathorizedHandler))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()

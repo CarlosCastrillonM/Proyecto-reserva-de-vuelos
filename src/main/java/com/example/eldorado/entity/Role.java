@@ -4,7 +4,6 @@ package com.example.eldorado.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "roles")
