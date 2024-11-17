@@ -7,11 +7,11 @@ import java.util.List;
 public class AirlineDto {
     private Integer id;
     private String name;
-    private int code;
+    private Integer code;
     private String origin;
     private List<Flight> flights;
 
-    public AirlineDto(Integer id, String name, int code, String origin, List<Flight> flights) {
+    public AirlineDto(Integer id, String name, Integer code, String origin, List<Flight> flights) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -39,11 +39,11 @@ public class AirlineDto {
         this.name = name;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
