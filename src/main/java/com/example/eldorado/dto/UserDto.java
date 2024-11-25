@@ -8,23 +8,23 @@ import java.util.Set;
 public class UserDto {
     private Integer id;
     private String username;
-    private String password;
     private String email;
+    private String password;
     private Set<Role> roles = new HashSet<>();
 
-    public UserDto(Integer id, String username, String password, String email, Set<Role> roles) {
+    public UserDto(Integer id, String username, String email, String password, Set<Role> roles) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.roles = roles;
     }
 
     public UserDto(Integer id, String username, String email, String password) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
