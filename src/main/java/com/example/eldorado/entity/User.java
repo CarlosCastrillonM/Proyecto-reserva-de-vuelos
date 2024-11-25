@@ -8,8 +8,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "unique_email", columnNames = {"email"}))
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
