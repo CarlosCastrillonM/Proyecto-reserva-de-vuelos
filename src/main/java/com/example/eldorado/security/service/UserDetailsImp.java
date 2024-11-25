@@ -41,17 +41,17 @@ public class UserDetailsImp implements UserDetails {
                 authorities);
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
     }
 
     @Override
@@ -63,4 +63,6 @@ public class UserDetailsImp implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+
 }
