@@ -17,20 +17,26 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private static Logger log = LoggerFactory.getLogger(JwtUtil.class);
+
     @Value("${app.jwt.secret}")
     private String jwtSecret;
+
     @Value("${app.jwt.expirationMs}")
     private String jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication){
+
         UserDetails userDetails = (UserDetailsImp)authentication.getPrincipal();
-        return Jwts.builder()
+
+        String token = Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
 
+        log.info("Token generated: " + token);
+        return token;
     }
     public boolean validateJwtToken(String authToken){
         try{

@@ -1,5 +1,6 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.AirportDto;
 import com.example.eldorado.dto.FlightDto;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface FlightService {
     FlightDto create(FlightDto flightDto);
     Optional<FlightDto> update(int id, FlightDto newFlightDto);
     void delete(int id);
-    List<FlightDto> findByOrigin(String origin);
+    List<FlightDto> findByOrigin(AirportDto origin);
 }

@@ -1,7 +1,10 @@
 package com.example.eldorado.service;
 
+import com.example.eldorado.dto.AirportDto;
 import com.example.eldorado.dto.FlightDto;
+import com.example.eldorado.entity.Airport;
 import com.example.eldorado.entity.Flight;
+import com.example.eldorado.mapper.AirportMapper;
 import com.example.eldorado.mapper.FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ public class FlightServiceImp implements FlightService {
 
     private final FlightRepository flightRepository;
     private FlightMapper mapper;
+
+    @Autowired
+    private AirportMapper mapperAirport;
 
     @Autowired
     public FlightServiceImp(FlightRepository flightRepository, FlightMapper mapper) {
@@ -72,8 +78,10 @@ public class FlightServiceImp implements FlightService {
     }
 
     @Override
-    public List<FlightDto> findByOrigin(String origin) {
-        List<Flight> flights = flightRepository.findByOrigin(origin);
+    public List<FlightDto> findByOrigin(AirportDto origin) {
+        Airport airport = mapperAirport.toEntity(origin);
+
+        List<Flight> flights = flightRepository.findByOrigin(airport);
         List<FlightDto> flightDtos = new ArrayList<>();
 
         for (Flight entity : flights) {
