@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public UserInfoDto addUser(UserInfoDto userInfo) {
-        User user = new User(null, userInfo.name(), userInfo.email(), passwordEncoder.encode(userInfo.password()),
+        User user = new User(null, userInfo.username(), userInfo.email(), passwordEncoder.encode(userInfo.password()),
                 Arrays.stream(userInfo.roles().split(" "))
                         .map(role -> new Role(ERole.valueOf(role)))
                         .collect(Collectors.toSet())
@@ -49,4 +49,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user = userRepository.save(user);
         return new UserInfoDto(user.getUsername(), user.getEmail(), userInfo.password(), userInfo.roles());
     }
+
 }

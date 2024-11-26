@@ -2,8 +2,8 @@ package com.example.eldorado.security.jwt;
 
 import com.example.eldorado.security.service.UserDetailsImp;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+
+import static java.security.KeyRep.Type.SECRET;
 
 @Component
 public class JwtUtil {
@@ -22,47 +25,54 @@ public class JwtUtil {
     private String jwtSecret;
 
     @Value("${app.jwt.expirationMs}")
-    private String jwtExpirationMs;
+    private long jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication){
 
-        UserDetails userDetails = (UserDetailsImp)authentication.getPrincipal();
+        UserDetailsImp userDetails = (UserDetailsImp)authentication.getPrincipal();
 
         String token = Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
+                .setSubject(userDetails.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS512)
                 .compact();
+
 
         log.info("Token generated: " + token);
         return token;
     }
+
     public boolean validateJwtToken(String authToken){
-        try{
+        try {
             Jwts.parser()
                     .setSigningKey(key())
                     .build()
-                    .parse(authToken);
+                    .parseClaimsJws(authToken);
             return true;
-        }catch (MalformedJwtException e  ){
-            log.error("Ivalid JWT token: {}",e.getMessage());
-        }catch (ExpiredJwtException e){
-            log.error("JWT token expired: {}", e.getMessage());
-        }catch (UnsupportedJwtException e){
-            log.error("JWT token is supported: {}", e.getMessage());
-        }catch (IllegalArgumentException e){
-            log.error("Jwt Claim string is empty: {}",e.getMessage());
+        } catch (Exception e) {
+            log.error("Error validating token: {}", e.getMessage());
         }
         return false;
-
-
     }
-    public String getUsernameFromJwtToken(String token){
-        return Jwts.parser().setSigningKey(key()).build()
-                .parseClaimsJwt(token).getPayload().getSubject();
+
+    public String getUsernameFromJwtToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
+
+    @PostConstruct
+    public void validateSecretKey() {
+        if (jwtSecret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalArgumentException("JWT secret key must be at least 32 characters long for HS512 algorithm.");
+        }
+    }
+
     private Key key(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 }
