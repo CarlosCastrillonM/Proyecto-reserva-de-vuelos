@@ -69,6 +69,7 @@ public class WebSecurityConfig {
                 .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "api/v1", "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "api/v1/flight/flight", "api/v1/airline/airlines").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -21,7 +21,7 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    @GetMapping("/flight")
+    @GetMapping("/flights")
     public ResponseEntity<List<FlightDto>> getAllFlight(){
         return ResponseEntity.ok(flightService.findAll());
     }

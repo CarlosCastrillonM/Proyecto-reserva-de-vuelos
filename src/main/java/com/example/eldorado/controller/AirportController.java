@@ -21,7 +21,7 @@ public class AirportController {
         this.airportService = airportService;
     }
 
-    @GetMapping("/airport")
+    @GetMapping("/airports")
     public ResponseEntity<List<AirportDto>> getAllAirport(){
         return ResponseEntity.ok(airportService.findAll());
     }

@@ -20,7 +20,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/reservation")
+    @GetMapping("/reservations")
     public ResponseEntity<List<ReservationDto>> getAllReservation(){
         return ResponseEntity.ok(reservationService.findAll());
     }

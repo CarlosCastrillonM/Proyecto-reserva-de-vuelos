@@ -21,7 +21,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/customer")
+    @GetMapping("/customers")
     public ResponseEntity<List<CustomerDto>> getAllCustomer(){
         return ResponseEntity.ok(customerService.findAll());
     }

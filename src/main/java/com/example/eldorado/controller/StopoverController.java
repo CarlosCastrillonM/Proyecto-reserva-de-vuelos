@@ -20,7 +20,7 @@ public class StopoverController {
         this.stopoverService = stopoverService;
     }
 
-    @GetMapping("/stopover")
+    @GetMapping("/stopovers")
     public ResponseEntity<List<StopoverDto>> getAllStopover(){
         return ResponseEntity.ok(stopoverService.findAll());
     }
