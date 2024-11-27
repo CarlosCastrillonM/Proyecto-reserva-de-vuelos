@@ -36,7 +36,7 @@ public class AirlineController {
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping()
+    @PostMapping("/")
     public ResponseEntity<AirlineDto> createAirline(@RequestBody AirlineDto airlineDto) throws URISyntaxException {
         AirlineDto newAirlineDto = airlineService.create(airlineDto);
 

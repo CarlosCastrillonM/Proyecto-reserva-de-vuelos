@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -66,10 +67,12 @@ public class WebSecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(c -> c.configurationSource(corsConfigurationSource()      ))
                 .sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "api/v1", "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/", "api/v1/flight/flight", "api/v1/airline/airlines").permitAll()
+                        //.requestMatchers(HttpMethod.GET, "/", "api/v1/flight/flight", "api/v1/airline/airlines").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/", "api/v1/airline/").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -77,7 +80,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
@@ -98,6 +101,6 @@ public class WebSecurityConfig {
         ));
         config.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return source;
     }
 }
